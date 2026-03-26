@@ -12,7 +12,7 @@ A feature-rich YouTube clone built using the MERN stack, JWT for authentication,
 - Uploading and viewing videos.
 - Create a channel and upload content.
 - Like, comment, save, and share videos.
-- Create playlists and share them with others.
+- Create playlists and share them with others.  
 - Video storage using Firebase Storage.
 - YouTube studio to manage channel and content.
 - Responsive design for mobile and desktop.
