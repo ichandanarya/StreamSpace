@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
   <head>
@@ -5,9 +6,41 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>frontend</title>
+=======
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="src/img/icon.png" type="image/x-icon">
+    <title>YouTube</title>
+>>>>>>> origin/main
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+<<<<<<< HEAD
+=======
+    <script>
+      const currentURL = window.location.href;
+      const local = "http://localhost:5173";
+
+      if (currentURL === `${local}/studio`) {
+        document.body.style.backgroundColor = "#1f1f1f";
+      } else if (currentURL === `${local}/studio/video`) {
+        document.body.style.backgroundColor = "#282828";
+      } else if (currentURL.includes(`/studio/comments`)) {
+        document.body.style.backgroundColor = "#282828";
+      } else if (currentURL.includes(`/studio/video/comments`)) {
+        document.body.style.backgroundColor = "#282828";
+      } else if (currentURL.includes(`/studio/video/edit`)) {
+        document.body.style.backgroundColor = "#282828";
+      } else if (currentURL.includes(`/studio/customize`)) {
+        document.body.style.backgroundColor = "#282828";
+      } else {
+        document.body.style.backgroundColor = "#0f0f0f";
+      }
+    </script>
+>>>>>>> origin/main
   </body>
 </html>

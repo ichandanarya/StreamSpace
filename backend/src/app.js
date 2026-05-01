@@ -1,35 +1,31 @@
-//This file creates and configures your Express app.
+// This file creates and configures your Express app.
 
-import express from "express";
-import cors from "cors";
-import videoRoutes from "./routes/videoRoutes.js";
+const express = require("express");
+const cors = require("cors");
 
-import authRoutes from "./routes/authRoutes.js";    // Importing authentication routes (login/register APIs)
-import { errorHandler } from "./middleware/errorMiddleware.js";     // Importing global error handling middleware
-import userRoutes from "./routes/userRoutes.js";
+const videoRoutes = require("./routes/videoRoutes");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const commentRoutes = require("./routes/commentRoutes");
+const playlistRoutes = require("./routes/playlistRoutes");
 
-import commentRoutes from "./routes/commentRoutes.js";
-
-import playlistRoutes from "./routes/playlistRoutes.js";
-
+const { errorHandler } = require("./middleware/errorMiddleware");
 
 const app = express();
 
 // Middleware
-app.use(cors());    // Enabling CORS for cross-origin requests
-app.use(express.json());// Middleware to parse incoming JSON requests
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/api/auth", authRoutes);// Mounting authentication routes at the /api/auth path
+app.use("/api/auth", authRoutes);
 app.use("/api/videos", videoRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/playlists", playlistRoutes);
+app.use("/api/comments", commentRoutes);
 
-// Error Middleware (always at last)
+// Error Middleware (always last)
 app.use(errorHandler);
 
-export default app;
-
-app.use("/api/users", userRoutes);
-
-app.use("/api/playlists", playlistRoutes);
-
-app.use("/api/comments", commentRoutes);
+module.exports = app;

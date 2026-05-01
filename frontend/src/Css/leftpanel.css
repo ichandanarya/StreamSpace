@@ -30,6 +30,11 @@
   padding-left: 10px;
   padding-right: 80px;
   transition: all 0.15s ease;
+<<<<<<< HEAD
+=======
+  min-height: 40px;
+  overflow: hidden;
+>>>>>>> origin/main
 }
 
 .sec-data:hover {
@@ -39,6 +44,13 @@
 
 .sec-data > p {
   padding-left: 20px;
+<<<<<<< HEAD
+=======
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+>>>>>>> origin/main
 }
 
 .seperate {
@@ -88,6 +100,10 @@
   padding-left: 10px;
   padding-right: 80px;
   transition: all 0.15s ease;
+<<<<<<< HEAD
+=======
+  overflow: hidden;
+>>>>>>> origin/main
 }
 
 .mysubscriptions:hover {
@@ -97,6 +113,13 @@
 
 .sub-channelnamee {
   padding-left: 20px;
+<<<<<<< HEAD
+=======
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+>>>>>>> origin/main
 }
 
 .my-playlist-data {
@@ -106,6 +129,11 @@
   padding-left: 10px;
   padding-right: 80px;
   transition: all 0.15s ease;
+<<<<<<< HEAD
+=======
+  overflow: hidden;
+  min-height: 40px;
+>>>>>>> origin/main
 }
 
 .my-playlist-data:hover {
@@ -115,6 +143,13 @@
 
 .my-playlist-data > p {
   padding-left: 20px;
+<<<<<<< HEAD
+=======
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+>>>>>>> origin/main
 }
 
 .developer {
