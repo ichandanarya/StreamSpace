@@ -2,10 +2,11 @@ const express = require("express");
 const router = require("./Router/router");
 const path = require("path");
 const bodyParser = require("body-parser");
+const cors = require("cors"); // ✅ FIXED
 const connectDB = require("./Database/database");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // ✅ only once
 
 // Connect DB
 connectDB();
@@ -14,8 +15,19 @@ connectDB();
 app.use(express.static(path.join(__dirname, "public")));
 
 // Middlewares
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://youtube-clone-mern-backend.vercel.app"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.use(express.json()); // ✅ only once
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
 
 // Routes
 app.get("/", (req, res) => {
@@ -24,7 +36,7 @@ app.get("/", (req, res) => {
 
 app.use(router);
 
-// View engine (only if you're using hbs)
+// View engine (optional)
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 
