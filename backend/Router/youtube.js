@@ -51,9 +51,18 @@ router.post("/youtube/search", async (req, res) => {
       return res.status(response.status).json({ error: errorMessage });
     }
 
-    // Filter out results without videoId
+    // Filter and transform results to include proper video data
     const items = Array.isArray(data.items)
-      ? data.items.filter((item) => item?.id?.videoId)
+      ? data.items
+          .filter((item) => item?.id?.videoId)
+          .map((item) => ({
+            videoId: item.id.videoId,
+            title: item.snippet.title || "Untitled",
+            description: item.snippet.description || "",
+            thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || "",
+            channelTitle: item.snippet.channelTitle || "Unknown Channel",
+            publishedAt: item.snippet.publishedAt || new Date().toISOString(),
+          }))
       : [];
 
     console.log(`✅ Found ${items.length} videos`);

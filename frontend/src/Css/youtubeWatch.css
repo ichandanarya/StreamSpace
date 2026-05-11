@@ -1,0 +1,136 @@
+.youtube-watch {
+  display: flex;
+  min-height: 100vh;
+  background-color: #0f0f0f;
+  color: #fff;
+}
+
+.youtube-watch.light {
+  background-color: #fff;
+  color: #0f0f0f;
+}
+
+.youtube-watch-container {
+  display: flex;
+  width: 100%;
+}
+
+.youtube-watch-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.youtube-watch-player {
+  margin-bottom: 24px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.youtube-watch-info {
+  max-width: 900px;
+}
+
+.youtube-watch-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.youtube-watch.light .youtube-watch-title {
+  color: #0f0f0f;
+}
+
+.youtube-watch-meta {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #333;
+}
+
+.youtube-watch.light .youtube-watch-meta {
+  border-bottom-color: #e0e0e0;
+}
+
+.youtube-watch-channel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0066cc;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.youtube-watch-channel:hover {
+  color: #0052a3;
+}
+
+.youtube-watch-date {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.youtube-watch.light .youtube-watch-date {
+  color: #606060;
+}
+
+.youtube-watch-description {
+  margin-top: 24px;
+}
+
+.youtube-watch-description h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #fff;
+}
+
+.youtube-watch.light .youtube-watch-description h3 {
+  color: #0f0f0f;
+}
+
+.youtube-watch-description p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #aaa;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.youtube-watch.light .youtube-watch-description p {
+  color: #606060;
+}
+
+.youtube-watch-error {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #aaa;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .youtube-watch-container {
+    flex-direction: column;
+  }
+
+  .youtube-watch-content {
+    padding: 12px;
+  }
+
+  .youtube-watch-title {
+    font-size: 18px;
+  }
+
+  .youtube-watch-meta {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}
