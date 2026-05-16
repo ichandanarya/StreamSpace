@@ -9,13 +9,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import Tooltip from "@mui/material/Tooltip";
 import Zoom from "@mui/material/Zoom";
+import { BACKEND_URL } from "../config";
 
 function YourChannel() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [channelData, setChannelData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -28,7 +28,7 @@ function YourChannel() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannel/${user?.email}`
+            `${BACKEND_URL}/getchannel/${user?.email}`
           );
           const result = await response.json();
           setChannelData(result);

@@ -7,16 +7,16 @@ import "../Css/likevideos.css";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 function LikeVideos() {
-  const backendURL = "http://localhost:5000";;
-  // const backendURL = "http://localhost:3000";
+
   const [menuClicked, setMenuClicked] = useState(() => {
     const menu = localStorage.getItem("menuClicked");
     return menu ? JSON.parse(menu) : false;
   });
   const [videolike, setLikedVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -40,7 +40,7 @@ function LikeVideos() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getlikevideos/${user?.email}`
+            `${BACKEND_URL}/getlikevideos/${user?.email}`
           );
           const result = await response.json();
           setLikedVideos(result);
@@ -90,13 +90,13 @@ function LikeVideos() {
     if (theme === false && !window.location.href.includes("/studio")) {
       document.body.style.backgroundColor = "white";
     } else if (theme === true && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "0f0f0f";
+      document.body.style.backgroundColor = "#0f0f0f";
     }
   }, [theme]);
 
   const updateViews = async (id) => {
     try {
-      const response = await fetch(`${backendURL}/updateview/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/updateview/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

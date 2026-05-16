@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import "../Css/youtubeVideoCard.css";
 
 function YouTubeVideoCard({ video }) {
@@ -38,5 +39,15 @@ function YouTubeVideoCard({ video }) {
     </div>
   );
 }
+
+YouTubeVideoCard.propTypes = {
+  video: PropTypes.shape({
+    videoId: PropTypes.string,
+    thumbnail: PropTypes.string,
+    title: PropTypes.string,
+    channelTitle: PropTypes.string,
+    publishedAt: PropTypes.string,
+  }),
+};
 
 export default YouTubeVideoCard;

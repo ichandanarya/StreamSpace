@@ -4,6 +4,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import deleteIMG from "../../img/delete.jpg";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function generateRandomColors(count) {
   const transparency = 0.7; // Adjust transparency as needed (0 to 1)
@@ -20,13 +21,12 @@ function generateRandomColors(count) {
 }
 
 function ChannelPlaylists(prop) {
-  // const backendURL = "http://localhost:5000";
-  const backendURL = "http://localhost:3000"
+
   const [PlaylistData, setPlaylistData] = useState([]);
   const [playlistColors, setPlaylistColors] = useState([]);
   const [loading, setLoading] = useState(true);
   const sampleArr = [1, 2, 3, 4];
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -50,7 +50,7 @@ function ChannelPlaylists(prop) {
       try {
         if (prop?.newmail) {
           const response = await fetch(
-            `${backendURL}/getplaylistdata/${prop?.newmail}`
+            `${BACKEND_URL}/getplaylistdata/${prop?.newmail}`
           );
           const playlistData = await response.json();
           setPlaylistData(playlistData);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import "../Css/youtubePlayer.css";
 
 function YouTubePlayer({ videoId, title }) {
@@ -22,5 +22,10 @@ function YouTubePlayer({ videoId, title }) {
     </div>
   );
 }
+
+YouTubePlayer.propTypes = {
+  videoId: PropTypes.string,
+  title: PropTypes.string,
+};
 
 export default YouTubePlayer;

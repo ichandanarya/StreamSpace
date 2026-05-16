@@ -5,17 +5,17 @@ import Branding from "./Branding";
 import { useState, useEffect } from "react";
 import Basic from "./Basic";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function Customization() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [currentTab, setCurrentTab] = useState("branding");
   const [channelID, setChannelID] = useState();
   const [menu, setmenu] = useState(() => {
     const menu = localStorage.getItem("studioMenuClicked");
     return menu ? JSON.parse(menu) : false;
   });
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -98,7 +98,7 @@ function Customization() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannelid/${user?.email}`
+            `${BACKEND_URL}/getchannelid/${user?.email}`
           );
           const { channelID } = await response.json();
           setChannelID(channelID);

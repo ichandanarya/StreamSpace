@@ -6,10 +6,10 @@ import Reset from "./Reset";
 import { BACKEND_URL } from "../config";
 
 function Signin(prop) {
-  const backendURL = BACKEND_URL;
+
   const [data, setData] = useState({});
   const [showReset, setShowReset] = useState(false);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -90,7 +90,7 @@ function Signin(prop) {
       return;
     }
     try {
-      const response = await fetch(`${backendURL}/login`, {
+      const response = await fetch(`${BACKEND_URL}/login`, {
         method: "POST",
         body: JSON.stringify(data),
         credentials: "include",

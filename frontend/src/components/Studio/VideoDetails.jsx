@@ -18,10 +18,10 @@ import { storage } from "../../Firebase";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GrUndo } from "react-icons/gr";
+import { BACKEND_URL } from "../../config";
 
 function VideoDetails() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const { id } = useParams();
   const [videodata, setVideoData] = useState();
   const [previewTitle, setPreviewTitle] = useState("");
@@ -42,7 +42,7 @@ function VideoDetails() {
     const menu = localStorage.getItem("studioMenuClicked2");
     return menu ? JSON.parse(menu) : false;
   });
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -115,7 +115,7 @@ function VideoDetails() {
       try {
         if (id) {
           const response = await fetch(
-            `${backendURL}/getvideodata/${id}`
+            `${BACKEND_URL}/getvideodata/${id}`
           );
           const data = await response.json();
           setVideoData(data);
@@ -304,7 +304,7 @@ function VideoDetails() {
       };
 
       const response = await fetch(
-        `${backendURL}/savevideoeditdetails/${id}`,
+        `${BACKEND_URL}/savevideoeditdetails/${id}`,
         {
           method: "POST",
           credentials: "include",

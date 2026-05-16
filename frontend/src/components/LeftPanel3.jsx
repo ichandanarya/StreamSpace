@@ -9,10 +9,9 @@ import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutl
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 function LeftPanel2() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const { id } = useParams();
   const [videodata, setVideoData] = useState();
   const VideoEditSection = localStorage.getItem("Video-Edit Section");
@@ -22,13 +21,10 @@ function LeftPanel2() {
     const menu = localStorage.getItem("studioMenuClicked2");
     return menu ? JSON.parse(menu) : false;
   });
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
-
-  const User = useSelector((state) => state.user.user);
-  const { user } = User;
 
   useEffect(() => {
     const handleMenuButtonClick = () => {
@@ -86,7 +82,7 @@ function LeftPanel2() {
     const GetVideoData = async () => {
       try {
         if (id) {
-          const response = await fetch(`${backendURL}/getvideodata/${id}`);
+          const response = await fetch(`${BACKEND_URL}/getvideodata/${id}`);
           const data = await response.json();
           setVideoData(data);
         }

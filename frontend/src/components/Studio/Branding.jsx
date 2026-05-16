@@ -7,10 +7,10 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function Branding() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [previewProfile, setPreviewProfile] = useState(defaultimg);
   const [selectedBanner, setSelectedBanner] = useState(null);
@@ -21,7 +21,7 @@ function Branding() {
   const [channelID, setChannelID] = useState();
   const [loading, setLoading] = useState(false);
   const [fakeLoading, setFakeLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -70,7 +70,7 @@ function Branding() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannel/${user?.email}`
+            `${BACKEND_URL}/getchannel/${user?.email}`
           );
           const { userProfile } = await response.json();
           setPreviewProfile(userProfile);
@@ -87,7 +87,7 @@ function Branding() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannelid/${user?.email}`
+            `${BACKEND_URL}/getchannelid/${user?.email}`
           );
           const { channelID } = await response.json();
           setChannelID(channelID);
@@ -103,7 +103,7 @@ function Branding() {
     const getChannelCover = async () => {
       try {
         if (user?.email) {
-          const response = await fetch(`${backendURL}/getcover/${user?.email}`);
+          const response = await fetch(`${BACKEND_URL}/getcover/${user?.email}`);
           const coverimg = await response.json();
           setPreviewBanner(coverimg);
         }
@@ -244,7 +244,7 @@ function Branding() {
         channelid: channelID,
       };
 
-      const response = await fetch(`${backendURL}/savecustomization/${user?.email}`, {
+      const response = await fetch(`${BACKEND_URL}/savecustomization/${user?.email}`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(data),
@@ -252,7 +252,7 @@ function Branding() {
           "Content-Type": "application/json",
         },
       });
-      const {success, userData} = await response.json();
+      const { success } = await response.json();
       if (success) {
         setChanges(false);
         saveNotify();

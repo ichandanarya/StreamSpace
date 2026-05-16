@@ -9,10 +9,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function Basic() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [channelName, setChannelName] = useState();
   const [channelDescription, setChannelDescription] = useState();
   const [channelID, setChannelID] = useState("");
@@ -32,7 +32,7 @@ function Basic() {
   const [twitterlink, settwitterLink] = useState("");
   const [weblink, setwebLink] = useState("");
   const [copy, setCopy] = useState(false);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -77,7 +77,7 @@ function Basic() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannel/${user?.email}`
+            `${BACKEND_URL}/getchannel/${user?.email}`
           );
           const { ChannelName } = await response.json();
           setChannelName(ChannelName);
@@ -91,7 +91,7 @@ function Basic() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannelid/${user?.email}`
+            `${BACKEND_URL}/getchannelid/${user?.email}`
           );
           const data = await response.json();
           const { channelDescription, channelID, links } = data;
@@ -149,7 +149,7 @@ function Basic() {
           channelID: channelID,
         };
         const response = await fetch(
-          `${backendURL}/savelinksdata/${user?.email}`,
+          `${BACKEND_URL}/savelinksdata/${user?.email}`,
           {
             method: "POST",
             credentials: "include",
@@ -181,7 +181,7 @@ function Basic() {
           channelID,
         };
         const response = await fetch(
-          `${backendURL}/updatechanneldata/${user?.email}`,
+          `${BACKEND_URL}/updatechanneldata/${user?.email}`,
           {
             method: "POST",
             credentials: "include",

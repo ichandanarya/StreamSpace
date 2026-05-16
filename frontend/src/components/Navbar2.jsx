@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "../config";
 //MUI Icons
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
@@ -18,8 +19,7 @@ import { BiSearch } from "react-icons/bi";
 import { useSelector } from "react-redux";
 
 function Navbar2() {
-  const backendURL = "http://localhost:5000";;
-  // const backendURL = "http://localhost:3000";
+
   const [profilePic, setProfilePic] = useState();
   const [userVideos, setUserVideos] = useState([]);
   const [showPop, setShowPop] = useState(false);
@@ -31,7 +31,7 @@ function Navbar2() {
   const [searchDesc, setSearchDesc] = useState(false);
   const [MobileSearch, setMobileSearch] = useState(false);
   const [searchClicked, setSearchClicked] = useState(false);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -92,7 +92,7 @@ function Navbar2() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannel/${user?.email}`
+            `${BACKEND_URL}/getchannel/${user?.email}`
           );
           const { userProfile } = await response.json();
           setProfilePic(userProfile);
@@ -110,7 +110,7 @@ function Navbar2() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getuservideos/${user?.email}`
+            `${BACKEND_URL}/getuservideos/${user?.email}`
           );
           const data = await response.json();
           setUserVideos(data);

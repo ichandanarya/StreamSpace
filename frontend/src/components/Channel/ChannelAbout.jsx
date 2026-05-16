@@ -10,17 +10,17 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import { BiTrendingUp } from "react-icons/bi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BACKEND_URL } from "../../config";
 
 function ChannelAbout(prop) {
-  // const backendURL = "http://localhost:5000";
-  const backendURL = "http://localhost:3000"
+
   const [Email, setEmail] = useState();
   const [description, setDescription] = useState();
   const [links, setLinks] = useState();
   const [joinedDate, setjoinedDate] = useState();
   const [TotalViews, setTotalViews] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -41,7 +41,7 @@ function ChannelAbout(prop) {
     const getUserMail = async () => {
       try {
         const response = await fetch(
-          `${backendURL}/getotherchannel/${prop?.channelid}`
+          `${BACKEND_URL}/getotherchannel/${prop?.channelid}`
         );
         const userEmail = await response.json();
         setEmail(userEmail);
@@ -64,7 +64,7 @@ function ChannelAbout(prop) {
       try {
         if (Email) {
           const response = await fetch(
-            `${backendURL}/getabout/${Email}`
+            `${BACKEND_URL}/getabout/${Email}`
           );
           const { description, sociallinks, joining } = await response.json();
           setDescription(description);
@@ -83,7 +83,7 @@ function ChannelAbout(prop) {
       try {
         if (Email) {
           const response = await fetch(
-            `${backendURL}/totalviews/${Email}`
+            `${BACKEND_URL}/totalviews/${Email}`
           );
           const totalViews = await response.json();
           setTotalViews(totalViews);

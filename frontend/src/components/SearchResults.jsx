@@ -15,10 +15,10 @@ import Zoom from "@mui/material/Zoom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 
 function SearchResults() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const { data } = useParams();
   const [searchedVideoData, setsearchedVideoData] = useState([]);
   const [searchedChannelData, setsearchedChannelData] = useState([]);
@@ -29,7 +29,7 @@ function SearchResults() {
   const [userVideos, setUserVideos] = useState([]);
   const [isSubscribed, setIsSubscribed] = useState();
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -63,14 +63,14 @@ function SearchResults() {
     if (theme === false && !window.location.href.includes("/studio")) {
       document.body.style.backgroundColor = "white";
     } else if (theme === true && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "0f0f0f";
+      document.body.style.backgroundColor = "#0f0f0f";
     }
   }, [theme]);
 
   useEffect(() => {
     const getSearchResult = async () => {
       try {
-        const response = await fetch(`${backendURL}/search/${data}`);
+        const response = await fetch(`${BACKEND_URL}/search/${data}`);
         const Data = await response.json();
         const { videoData, channelData } = Data;
         setsearchedVideoData(videoData);
@@ -79,7 +79,7 @@ function SearchResults() {
         // console.log(error.message);
       }
     };
-    return () => getSearchResult();
+    getSearchResult();
   }, [data]);
 
   useEffect(() => {
@@ -98,7 +98,7 @@ function SearchResults() {
       try {
         if (channelID) {
           const response = await fetch(
-            `${backendURL}/getotherchannel/${channelID}`
+            `${BACKEND_URL}/getotherchannel/${channelID}`
           );
           const email = await response.json();
           setUserEmail(email);
@@ -116,7 +116,7 @@ function SearchResults() {
       try {
         if (userEmail !== undefined) {
           const response = await fetch(
-            `${backendURL}/getuservideos/${userEmail}`
+            `${BACKEND_URL}/getuservideos/${userEmail}`
           );
 
           const myvideos = await response.json();
@@ -127,7 +127,7 @@ function SearchResults() {
       }
     };
 
-    return () => getUserVideos();
+    getUserVideos();
   }, [userEmail]);
 
   useEffect(() => {
@@ -135,7 +135,7 @@ function SearchResults() {
       try {
         if (user?.email && channelID) {
           const response = await fetch(
-            `${backendURL}/checksubscription/${channelID}/${user?.email}`
+            `${BACKEND_URL}/checksubscription/${channelID}/${user?.email}`
           );
           const { message } = await response.json();
           if (message === true) {
@@ -149,14 +149,14 @@ function SearchResults() {
       }
     };
 
-    return () => checkSubscription();
-  }, []);
+    checkSubscription();
+  }, [channelID, user?.email]);
 
   //POST REQUESTS
 
   const updateViews = async (id) => {
     try {
-      const response = await fetch(`${backendURL}/updateview/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/updateview/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -181,7 +181,7 @@ function SearchResults() {
       };
       if (userEmail && user?.email) {
         const response = await fetch(
-          `${backendURL}/subscribe/${channelID}/${user?.email}/${userEmail}`,
+          `${BACKEND_URL}/subscribe/${channelID}/${user?.email}/${userEmail}`,
           {
             method: "POST",
             body: JSON.stringify(channelData),

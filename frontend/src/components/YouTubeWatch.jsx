@@ -1,21 +1,18 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import YouTubePlayer from "./YouTubePlayer";
 import Navbar from "./Navbar";
 import LeftPanel from "./LeftPanel";
 import "../Css/youtubeWatch.css";
-import { useSelector } from "react-redux";
 
 function YouTubeWatch() {
   const { videoId } = useParams();
   const location = useLocation();
-  const [videoData, setVideoData] = useState(location.state?.videoData || null);
-  const [theme, setTheme] = useState(() => {
+  const videoData = location.state?.videoData || null;
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
-
-  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     document.title = videoData?.title

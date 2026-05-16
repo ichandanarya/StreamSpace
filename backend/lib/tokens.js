@@ -1,22 +1,23 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
+const { env } = require("../config/env");
 
 const generateAccessToken = (user) => {
   return jwt.sign(
-    { 
-      userId: user._id, 
+    {
+      userId: user._id,
       email: user.email,
-      username: user.username
+      username: user.username,
     },
-    process.env.JWT_SECRET,
-    { expiresIn: '15m' } // Short-lived access token
+    env.JWT_SECRET,
+    { expiresIn: "15m" }
   );
 };
 
 const verifyRefreshToken = (token) => {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET);
+    return jwt.verify(token, env.JWT_SECRET);
   } catch (error) {
-    throw new Error('Invalid refresh token');
+    throw new Error("Invalid refresh token");
   }
 };
 

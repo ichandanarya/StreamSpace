@@ -16,10 +16,10 @@ import { useParams } from "react-router-dom";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function VideoComments() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const { id } = useParams();
   const [videoComments, setVideoComments] = useState([]);
   const [Profile, setProfile] = useState();
@@ -29,7 +29,7 @@ function VideoComments() {
     const menu = localStorage.getItem("studioMenuClicked2");
     return menu ? JSON.parse(menu) : false;
   });
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -120,7 +120,7 @@ function VideoComments() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannel/${user?.email}`
+            `${BACKEND_URL}/getchannel/${user?.email}`
           );
           const { userProfile } = await response.json();
           setProfile(userProfile);
@@ -137,7 +137,7 @@ function VideoComments() {
       try {
         if (id) {
           const response = await fetch(
-            `${backendURL}/getvideocommentsbyid/${id}`
+            `${BACKEND_URL}/getvideocommentsbyid/${id}`
           );
           const comments = await response.json();
           setVideoComments(comments);
@@ -153,7 +153,7 @@ function VideoComments() {
     try {
       if (commentId && id && user?.email) {
         const response = await fetch(
-          `${backendURL}/likecomment/${id}/${commentId}/${user?.email}`,
+          `${BACKEND_URL}/likecomment/${id}/${commentId}/${user?.email}`,
           {
             method: "POST",
             credentials: "include",
@@ -172,7 +172,7 @@ function VideoComments() {
   const HeartComment = async (id, commentID) => {
     try {
       const response = await fetch(
-        `${backendURL}/heartcomment/${id}/${commentID}`,
+        `${BACKEND_URL}/heartcomment/${id}/${commentID}`,
         {
           method: "POST",
           credentials: "include",
@@ -191,7 +191,7 @@ function VideoComments() {
     try {
       if (user?.email) {
         const response = await fetch(
-          `${backendURL}/deletecomment/${id}/${commentId}/${user?.email}`,
+          `${BACKEND_URL}/deletecomment/${id}/${commentId}/${user?.email}`,
           {
             method: "POST",
             credentials: "include",

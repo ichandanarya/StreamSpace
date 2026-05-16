@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function ChannelVideos(prop) {
-  // const backendURL = "http://localhost:5000";
-  const backendURL = "http://localhost:3000"
+
   const [myVideos, setMyVideos] = useState([]);
   const [videosort, setVideoSort] = useState();
   const [loading, setLoading] = useState(true);
   const [showDiv, setShowDiv] = useState(false);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -40,13 +40,13 @@ function ChannelVideos(prop) {
       try {
         if (user?.email === prop?.newmail) {
           const response = await fetch(
-            `${backendURL}/getuservideos/${user?.email}`
+            `${BACKEND_URL}/getuservideos/${user?.email}`
           );
           const myvideos = await response.json();
           setMyVideos(myvideos);
         } else {
           const response = await fetch(
-            `${backendURL}/getuservideos/${prop?.newmail}`
+            `${BACKEND_URL}/getuservideos/${prop?.newmail}`
           );
           const myvideos = await response.json();
           setMyVideos(myvideos);
@@ -62,7 +62,7 @@ function ChannelVideos(prop) {
   const updateViews = async (id) => {
     try {
       const response = await fetch(
-        `${backendURL}/updateview/${id}`,
+        `${BACKEND_URL}/updateview/${id}`,
         {
           method: "POST",
           headers: {

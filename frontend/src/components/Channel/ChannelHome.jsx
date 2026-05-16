@@ -9,14 +9,14 @@ import noImage2 from "../../img/novideo.png";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function ChannelHome(prop) {
-// const backendURL = "http://localhost:5000";
-  const backendURL = "http://localhost:3000"
+
   const [myVideos, setMyVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showHome, setShowHome] = useState(false);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -43,7 +43,7 @@ function ChannelHome(prop) {
     if (theme === false && !window.location.href.includes("/studio")) {
       document.body.style.backgroundColor = "white";
     } else if (theme === true && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "0f0f0f";
+      document.body.style.backgroundColor = "#0f0f0f";
     }
   }, [theme]);
 
@@ -52,13 +52,13 @@ function ChannelHome(prop) {
       try {
         if (user?.email === prop?.newmail) {
           const response = await fetch(
-            `${backendURL}/getuservideos/${user?.email}`
+            `${BACKEND_URL}/getuservideos/${user?.email}`
           );
           const myvideos = await response.json();
           setMyVideos(myvideos);
         } else {
           const response = await fetch(
-            `${backendURL}/getuservideos/${prop?.newmail}`
+            `${BACKEND_URL}/getuservideos/${prop?.newmail}`
           );
           const myvideos = await response.json();
           setMyVideos(myvideos);
@@ -74,7 +74,7 @@ function ChannelHome(prop) {
   const updateViews = async (id) => {
     try {
       const response = await fetch(
-        `${backendURL}/updateview/${id}`,
+        `${BACKEND_URL}/updateview/${id}`,
         {
           method: "POST",
           headers: {

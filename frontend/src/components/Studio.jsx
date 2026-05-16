@@ -23,6 +23,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { LiaUploadSolid } from "react-icons/lia";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 
 //SOCIALS
 
@@ -32,8 +33,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LanguageIcon from "@mui/icons-material/Language";
 
 function Studio() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [isChannel, setisChannel] = useState();
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
@@ -64,7 +64,7 @@ function Studio() {
   const [isVisibilityClicked, setisVisibilityClicked] = useState(false);
   const [myVideos, setMyVideos] = useState([]);
   const [isPublished, setIsPublished] = useState(false);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -135,7 +135,7 @@ function Studio() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getuservideos/${user?.email}`
+            `${BACKEND_URL}/getuservideos/${user?.email}`
           );
           const data = await response.json();
           setMyVideos(data);
@@ -224,7 +224,7 @@ function Studio() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannel/${user?.email}`
+            `${BACKEND_URL}/getchannel/${user?.email}`
           );
           const { hasChannel } = await response.json();
           setisChannel(hasChannel);
@@ -424,7 +424,7 @@ function Studio() {
       };
 
       // Proceed with saving the channel data
-      const response = await fetch(`${backendURL}/savechannel`, {
+      const response = await fetch(`${BACKEND_URL}/savechannel`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(data),
@@ -562,7 +562,7 @@ function Studio() {
           Visibility: visibility,
         };
         // Send the POST request
-        const response = await fetch(`${backendURL}/publish`, {
+        const response = await fetch(`${BACKEND_URL}/publish`, {
           method: "POST",
           credentials: "include",
           body: JSON.stringify(data),

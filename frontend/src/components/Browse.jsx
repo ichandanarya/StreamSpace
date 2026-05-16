@@ -9,10 +9,10 @@ import LeftPanel from "./LeftPanel";
 import Navbar from "./Navbar";
 import "../Css/theme.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 
 function Browse() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [thumbnails, setThumbnails] = useState([]);
   const [Titles, setTitles] = useState();
   const [uploader, setUploader] = useState();
@@ -30,7 +30,7 @@ function Browse() {
   const [publishDate, setPublishDate] = useState();
   const [FilteredVideos, setFilteredVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -94,7 +94,7 @@ function Browse() {
   useEffect(() => {
     const getVideos = async () => {
       try {
-        const response = await fetch(`${backendURL}/getvideos`);
+        const response = await fetch(`${BACKEND_URL}/getvideos`);
         const {
           thumbnailURLs,
           titles,
@@ -151,7 +151,7 @@ function Browse() {
     if (theme === false && !window.location.href.includes("/studio")) {
       document.body.style.backgroundColor = "white";
     } else if (theme === true && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "0f0f0f";
+      document.body.style.backgroundColor = "#0f0f0f";
     }
   }, [theme]);
 
@@ -159,7 +159,7 @@ function Browse() {
 
   const updateViews = async (id) => {
     try {
-      const response = await fetch(`${backendURL}/updateview/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/updateview/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

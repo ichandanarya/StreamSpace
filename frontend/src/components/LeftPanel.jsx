@@ -17,6 +17,7 @@ import Signin from "./Signin";
 import { useLocation } from "react-router-dom";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { BACKEND_URL } from "../config";
 // import CodeIcon from "@mui/icons-material/Code";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { GoHome } from "react-icons/go";
@@ -43,8 +44,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useSelector } from "react-redux";
 
 function LeftPanel() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [menuClicked, setMenuClicked] = useState(() => {
     const menu = localStorage.getItem("menuClicked");
     return menu ? JSON.parse(menu) : false;
@@ -150,7 +150,7 @@ function LeftPanel() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getsubscriptions/${user?.email}`
+            `${BACKEND_URL}/getsubscriptions/${user?.email}`
           );
           const result = await response.json();
           setSubscriptions(result);
@@ -168,7 +168,7 @@ function LeftPanel() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getplaylistdata/${user?.email}`
+            `${BACKEND_URL}/getplaylistdata/${user?.email}`
           );
           const playlistData = await response.json();
           setPlaylistData(playlistData);
@@ -185,7 +185,7 @@ function LeftPanel() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getsavedplaylist/${user?.email}`
+            `${BACKEND_URL}/getsavedplaylist/${user?.email}`
           );
           const matchingPlaylists = await response.json();
           setSavedPlaylist(matchingPlaylists);

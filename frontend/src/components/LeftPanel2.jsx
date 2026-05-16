@@ -12,6 +12,7 @@ import { CiShare1 } from "react-icons/ci";
 import Tooltip from "@mui/material/Tooltip";
 import Zoom from "@mui/material/Zoom";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 // REACT ICONS
 
 import { MdDashboard } from "react-icons/md";
@@ -20,8 +21,7 @@ import { BiCommentDetail } from "react-icons/bi";
 import { MdOutlineAutoFixHigh } from "react-icons/md";
 
 function LeftPanel2() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [profileIMG, setProfileIMG] = useState();
   const [channel, setChannel] = useState("");
   const [channelId, setChannelId] = useState();
@@ -32,7 +32,7 @@ function LeftPanel2() {
   const StudioSection = localStorage.getItem("Studio-Section");
   const location = useLocation();
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -97,7 +97,7 @@ function LeftPanel2() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannel/${user?.email}`
+            `${BACKEND_URL}/getchannel/${user?.email}`
           );
           const { userProfile, ChannelName } = await response.json();
           setProfileIMG(userProfile);
@@ -116,7 +116,7 @@ function LeftPanel2() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannelid/${user?.email}`
+            `${BACKEND_URL}/getchannelid/${user?.email}`
           );
           const { channelID } = await response.json();
           setChannelId(channelID);

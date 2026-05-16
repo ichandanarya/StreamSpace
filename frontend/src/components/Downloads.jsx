@@ -7,13 +7,13 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import GetAppIcon from "@mui/icons-material/GetApp";
+import { BACKEND_URL } from "../config";
 
 function Downloads() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [downloads, setDownloads] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -26,7 +26,7 @@ function Downloads() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getdownloads/${user?.email}`
+            `${BACKEND_URL}/getdownloads/${user?.email}`
           );
           const result = await response.json();
           setDownloads(result.downloads || []);
@@ -44,7 +44,7 @@ function Downloads() {
   const handleRemoveDownload = async (videoId) => {
     try {
       if (user?.email) {
-        await fetch(`${backendURL}/removedownload/${user?.email}/${videoId}`, {
+        await fetch(`${BACKEND_URL}/removedownload/${user?.email}/${videoId}`, {
           method: "DELETE",
         });
         setDownloads(downloads.filter((item) => item._id !== videoId));
@@ -133,7 +133,7 @@ function Downloads() {
             ))
           ) : (
             <div className="empty-downloads">
-              <p>You haven't downloaded any videos yet</p>
+              <p>You haven&apos;t downloaded any videos yet</p>
               <small>Download videos to watch them offline</small>
             </div>
           )}

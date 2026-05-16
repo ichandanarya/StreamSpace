@@ -5,9 +5,10 @@ const express = require("express");
 const userData = require("../Models/user");
 const videodata = require("../Models/videos");
 const TrendingData = require("../Models/trending");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const cookieParser = require("cookie-parser");
 const { verifyRefreshToken, generateAccessToken } = require("../lib/tokens");
+const { env } = require("../config/env");
 const Studio = express.Router();
 
 Studio.use(cookieParser());
@@ -335,7 +336,7 @@ Studio.get("/:userId/:token", async (req, res) => {
       });
     }
 
-    jwt.verify(token, process.env.SECRET_KEY, (err, payload) => {
+    jwt.verify(token, env.SECRET_KEY, (err, payload) => {
       if (err) {
         return res.status(401).json({ message: "Token verification failed" });
       }
@@ -355,6 +356,7 @@ Studio.post("/resetpassword", async (req, res) => {
     const password1 = req.body.new_password;
     const password2 = req.body.new_password1;
     const email = req.body.email;
+    const resetCode = req.body.reset_code;
 
     if (password1 === "" || password2 === "") {
       return res.send("Input fields can't be empty!");
@@ -367,6 +369,13 @@ Studio.post("/resetpassword", async (req, res) => {
         return res.send("USER DOESN'T EXIST");
       }
 
+      if (
+        resetCode &&
+        (user.resetCode !== resetCode || user.resetCodeExpires < Date.now())
+      ) {
+        return res.status(400).send("Password reset link is invalid or expired.");
+      }
+
       const checkPassword = await bcrypt.compare(password1, user.password);
 
       if (checkPassword) {
@@ -374,6 +383,8 @@ Studio.post("/resetpassword", async (req, res) => {
       } else {
         const hashedPassword = await bcrypt.hash(password1, 11);
         user.password = hashedPassword;
+        user.resetCode = undefined;
+        user.resetCodeExpires = undefined;
         await user.save();
         return res.render("done");
       }

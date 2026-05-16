@@ -16,7 +16,7 @@ import { BACKEND_URL } from "../config";
 
 function AccountPop() {
   // const backendURL = "https://youtube-clone-mern-backend.vercel.app"
-  // const backendURL = "http://localhost:3000";
+
   const [profile, setProfile] = useState("");
   const [theme, setTheme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
@@ -43,7 +43,9 @@ function AccountPop() {
           const { channelIMG } = await response.json();
           setProfile(channelIMG);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error("Failed to fetch user image:", error);
+      }
     };
 
     getUserData();
@@ -59,7 +61,9 @@ function AccountPop() {
           const { channelID } = await response.json();
           setChannelID(channelID);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error("Failed to fetch channel id:", error);
+      }
     };
 
     getChannelID();
@@ -75,7 +79,9 @@ function AccountPop() {
           const { hasChannel } = await response.json();
           setIsChannel(hasChannel);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error("Failed to fetch channel status:", error);
+      }
     };
 
     getChannel();

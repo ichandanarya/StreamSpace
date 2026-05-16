@@ -12,10 +12,10 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import noVideo from "../../img/no-video2.png";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function Dashboard() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [myVideos, setMyVideos] = useState([]);
   const [dropDown, setDropDown] = useState(true);
   const [showSortedVideos, setShowSortedVideos] = useState(false); // State for hover effect
@@ -26,7 +26,7 @@ function Dashboard() {
     const menu = localStorage.getItem("studioMenuClicked");
     return menu ? JSON.parse(menu) : false;
   });
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -62,7 +62,7 @@ function Dashboard() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getuservideos/${user?.email}`
+            `${BACKEND_URL}/getuservideos/${user?.email}`
           );
           const data = await response.json();
           setMyVideos(data);
@@ -80,7 +80,7 @@ function Dashboard() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getsubscribers/${user?.email}`
+            `${BACKEND_URL}/getsubscribers/${user?.email}`
           );
           const subscribers = await response.json();
 
@@ -100,7 +100,7 @@ function Dashboard() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/totalviews/${user?.email}`
+            `${BACKEND_URL}/totalviews/${user?.email}`
           );
           const totalViews = await response.json();
           setTotalViews(totalViews);

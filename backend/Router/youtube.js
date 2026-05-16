@@ -1,20 +1,18 @@
 const express = require("express");
+const { env } = require("../config/env");
 const router = express.Router();
 
-const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 const YOUTUBE_API_BASE_URL = "https://www.googleapis.com/youtube/v3";
 
 // POST /youtube/search - Search YouTube videos
 router.post("/youtube/search", async (req, res) => {
   try {
-    if (!YOUTUBE_API_KEY) {
-      console.error("❌ YouTube API key is not set in environment variables");
+    if (!env.YOUTUBE_API_KEY) {
+      console.error("YouTube API key is not set in environment variables");
       return res.status(500).json({
         error: "YouTube API key not configured on server",
       });
     }
-
-    console.log("✅ YouTube API key loaded:", YOUTUBE_API_KEY.substring(0, 10) + "...");
 
     const query = req.body.query || req.body.searchQuery;
     const pageToken = req.body.pageToken || req.body.page_token || "";
@@ -25,14 +23,12 @@ router.post("/youtube/search", async (req, res) => {
       });
     }
 
-    console.log(`🔍 Searching YouTube for: "${query}"`);
-
     const params = new URLSearchParams({
       part: "snippet",
       q: query.trim(),
       type: "video",
       maxResults: "12",
-      key: YOUTUBE_API_KEY,
+      key: env.YOUTUBE_API_KEY,
     });
 
     if (pageToken) {
@@ -40,14 +36,12 @@ router.post("/youtube/search", async (req, res) => {
     }
 
     const url = `${YOUTUBE_API_BASE_URL}/search?${params}`;
-    console.log("📡 Requesting:", url.substring(0, 50) + "...");
-
     const response = await fetch(url);
     const data = await response.json();
 
     if (!response.ok) {
       const errorMessage = data?.error?.message || "YouTube API error";
-      console.error("❌ YouTube API Error:", errorMessage);
+      console.error("YouTube API error:", errorMessage);
       return res.status(response.status).json({ error: errorMessage });
     }
 
@@ -59,13 +53,14 @@ router.post("/youtube/search", async (req, res) => {
             videoId: item.id.videoId,
             title: item.snippet.title || "Untitled",
             description: item.snippet.description || "",
-            thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || "",
+            thumbnail:
+              item.snippet.thumbnails?.medium?.url ||
+              item.snippet.thumbnails?.default?.url ||
+              "",
             channelTitle: item.snippet.channelTitle || "Unknown Channel",
             publishedAt: item.snippet.publishedAt || new Date().toISOString(),
           }))
       : [];
-
-    console.log(`✅ Found ${items.length} videos`);
 
     res.json({
       items,
@@ -73,7 +68,7 @@ router.post("/youtube/search", async (req, res) => {
       prevPageToken: data.prevPageToken || null,
     });
   } catch (error) {
-    console.error("❌ YouTube Search Error:", error);
+    console.error("YouTube search error:", error);
     res.status(500).json({
       error: error.message || "Failed to search YouTube videos",
     });

@@ -34,10 +34,10 @@ import "react-toastify/dist/ReactToastify.css";
 import LeftPanel from "./LeftPanel";
 import Error from "./Error";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 
 function VideoSection() {
-  const backendURL = "http://localhost:5000";;
-  // const backendURL = "http://localhost:3000";
+
   const { id } = useParams();
   const [videoData, setVideoData] = useState(null);
   const [channelName, setChannelName] = useState();
@@ -61,7 +61,7 @@ function VideoSection() {
   const [seeDesc, setSeeDesc] = useState(false);
   const [commentLoading, setCommentLoading] = useState(false);
   const [commentOpacity, setCommentOpacity] = useState(1);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -178,7 +178,7 @@ function VideoSection() {
     if (theme === false && !window.location.href.includes("/studio")) {
       document.body.style.backgroundColor = "white";
     } else if (theme === true && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "0f0f0f";
+      document.body.style.backgroundColor = "#0f0f0f";
     }
   }, [theme]);
 
@@ -206,7 +206,7 @@ function VideoSection() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/checkchannel/${user?.email}`
+            `${BACKEND_URL}/checkchannel/${user?.email}`
           );
           const channelname = await response.json();
           setChannelName(channelname);
@@ -224,7 +224,7 @@ function VideoSection() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannel/${user?.email}`
+            `${BACKEND_URL}/getchannel/${user?.email}`
           );
           const { hasChannel, userProfile } = await response.json();
           setisChannel(hasChannel);
@@ -241,7 +241,7 @@ function VideoSection() {
     const getTrendingData = async () => {
       try {
         if (id) {
-          const response = await fetch(`${backendURL}/gettrendingdata/${id}`);
+          const response = await fetch(`${BACKEND_URL}/gettrendingdata/${id}`);
           const data = await response.json();
           setCheckTrending(data);
         }
@@ -257,7 +257,7 @@ function VideoSection() {
       try {
         if (id && usermail) {
           const response = await fetch(
-            `${backendURL}/checktrending/${id}/${usermail}`
+            `${BACKEND_URL}/checktrending/${id}/${usermail}`
           );
           await response.json();
         }
@@ -272,7 +272,7 @@ function VideoSection() {
     const getVideoData = async () => {
       try {
         if (id) {
-          const response = await fetch(`${backendURL}/videodata/${id}`);
+          const response = await fetch(`${BACKEND_URL}/videodata/${id}`);
           const video = await response.json();
           setVideoData(video);
         }
@@ -287,7 +287,7 @@ function VideoSection() {
   useEffect(() => {
     const getVideos = async () => {
       try {
-        const response = await fetch(`${backendURL}/getvideos`);
+        const response = await fetch(`${BACKEND_URL}/getvideos`);
         const {
           thumbnailURLs,
           titles,
@@ -313,18 +313,16 @@ function VideoSection() {
   }, []);
 
   useEffect(() => {
-    const initializePlyr = () => {
-      if (!plyrInitialized && videoRef.current) {
-        const player = new Plyr(videoRef.current, {
-          background: "red",
-          ratio: null,
-        });
-        setPlyrInitialized(true);
-      }
-    };
+    if (!plyrInitialized && videoData && videoData.VideoData && videoRef.current) {
+      const player = new Plyr(videoRef.current, {
+        background: "red",
+        ratio: null,
+      });
+      setPlyrInitialized(true);
 
-    if (videoData && videoData.VideoData) {
-      initializePlyr();
+      return () => {
+        player.destroy();
+      };
     }
   }, [plyrInitialized, videoData]);
 
@@ -332,7 +330,7 @@ function VideoSection() {
     const getLikes = async () => {
       try {
         if (id) {
-          const response = await fetch(`${backendURL}/getlike/${id}`);
+          const response = await fetch(`${BACKEND_URL}/getlike/${id}`);
           const likes = await response.json();
           setVideoLikes(likes);
         }
@@ -349,7 +347,7 @@ function VideoSection() {
       try {
         if (id && user?.email) {
           const response = await fetch(
-            `${backendURL}/getuserlikes/${id}/${user?.email}`
+            `${BACKEND_URL}/getuserlikes/${id}/${user?.email}`
           );
           const { existingLikedVideo } = await response.json();
           if (!existingLikedVideo) {
@@ -369,7 +367,7 @@ function VideoSection() {
     const CommentLikes = async () => {
       try {
         if (id) {
-          const response = await fetch(`${backendURL}/likecomment/${id}`);
+          const response = await fetch(`${BACKEND_URL}/likecomment/${id}`);
           const result = await response.json();
           setCommentLikes(result);
         }
@@ -385,7 +383,7 @@ function VideoSection() {
       try {
         if (id && user?.email) {
           const response = await fetch(
-            `${backendURL}/checkwatchlater/${id}/${user?.email}`
+            `${BACKEND_URL}/checkwatchlater/${id}/${user?.email}`
           );
           const data = await response.json();
           if (data === "Found") {
@@ -406,7 +404,7 @@ function VideoSection() {
     const getComments = async () => {
       try {
         if (id) {
-          const response = await fetch(`${backendURL}/getcomments/${id}`);
+          const response = await fetch(`${BACKEND_URL}/getcomments/${id}`);
           const result = await response.json();
           setComments(result);
         }
@@ -421,7 +419,7 @@ function VideoSection() {
     const getOtherChannel = async () => {
       try {
         if (id) {
-          const response = await fetch(`${backendURL}/otherchannel/${id}`);
+          const response = await fetch(`${BACKEND_URL}/otherchannel/${id}`);
           const userEmail = await response.json();
           setUserMail(userEmail);
         }
@@ -438,7 +436,7 @@ function VideoSection() {
       try {
         if (usermail) {
           const response = await fetch(
-            `${backendURL}/getchannelid/${usermail}`
+            `${BACKEND_URL}/getchannelid/${usermail}`
           );
           const { channelID, subscribers } = await response.json();
           setChannelID(channelID);
@@ -456,7 +454,7 @@ function VideoSection() {
     const GetChannelData = async () => {
       try {
         if (usermail) {
-          const response = await fetch(`${backendURL}/subscribe/${usermail}`);
+          const response = await fetch(`${BACKEND_URL}/subscribe/${usermail}`);
           const { channel, profile, channelid } = await response.json();
           setyoutuberName(channel);
           setyoutuberProfile(profile);
@@ -475,7 +473,7 @@ function VideoSection() {
       try {
         if (user?.email && channelID !== undefined) {
           const response = await fetch(
-            `${backendURL}/checksubscription/${channelID}/${user?.email}`
+            `${BACKEND_URL}/checksubscription/${channelID}/${user?.email}`
           );
           const { message } = await response.json();
           setIsSubscribed(message);
@@ -493,7 +491,7 @@ function VideoSection() {
       try {
         if (usermail) {
           const response = await fetch(
-            `${backendURL}/getuservideos/${usermail}`
+            `${BACKEND_URL}/getuservideos/${usermail}`
           );
           const myvideos = await response.json();
           setUserVideos(myvideos);
@@ -511,7 +509,7 @@ function VideoSection() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getplaylistdata/${user?.email}`
+            `${BACKEND_URL}/getplaylistdata/${user?.email}`
           );
           const playlists = await response.json();
           setUserPlaylist(playlists || "No playlists available...");
@@ -529,7 +527,7 @@ function VideoSection() {
       try {
         if (id !== undefined && user?.email) {
           const response = await fetch(
-            `${backendURL}/getvideodataplaylist/${user?.email}/${id}`
+            `${BACKEND_URL}/getvideodataplaylist/${user?.email}/${id}`
           );
           const playlistIdsWithVideo = await response.json();
           setplaylistID(playlistIdsWithVideo);
@@ -546,7 +544,7 @@ function VideoSection() {
       if (!id) return;
 
       try {
-        const response = await fetch(`${backendURL}/getheartcomment/${id}`);
+        const response = await fetch(`${BACKEND_URL}/getheartcomment/${id}`);
         const heart = await response.json();
         setIsHeart(heart);
       } catch (error) {
@@ -569,7 +567,7 @@ function VideoSection() {
     try {
       setCommentLoading(true);
       const response1 = await fetch(
-        `${backendURL}/getchannelid/${user?.email}`
+        `${BACKEND_URL}/getchannelid/${user?.email}`
       );
       const { channelID } = await response1.json();
       const data = {
@@ -577,7 +575,7 @@ function VideoSection() {
         email: user?.email,
         channelID,
       };
-      const response = await fetch(`${backendURL}/comments/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/comments/${id}`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(data),
@@ -696,7 +694,7 @@ function VideoSection() {
       setLikeLoading(true);
 
       const response = await fetch(
-        `${backendURL}/like/${id}/${user?.email}/${usermail}`,
+        `${BACKEND_URL}/like/${id}/${user?.email}/${usermail}`,
         {
           method: "POST",
           credentials: "include",
@@ -726,7 +724,7 @@ function VideoSection() {
     try {
       if (commentId !== undefined && id !== undefined && user?.email) {
         const response = await fetch(
-          `${backendURL}/likecomment/${id}/${commentId}/${user?.email}`,
+          `${BACKEND_URL}/likecomment/${id}/${commentId}/${user?.email}`,
           {
             method: "POST",
             credentials: "include",
@@ -751,7 +749,7 @@ function VideoSection() {
     try {
       if (id !== undefined && channelID !== undefined) {
         const response = await fetch(
-          `${backendURL}/heartcomment/${id}/${commentID}`,
+          `${BACKEND_URL}/heartcomment/${id}/${commentID}`,
           {
             method: "POST",
             credentials: "include",
@@ -772,7 +770,7 @@ function VideoSection() {
       setCommentOpacity(0.34);
 
       const response = await fetch(
-        `${backendURL}/deletecomment/${id}/${commentId}/${user?.email}`,
+        `${BACKEND_URL}/deletecomment/${id}/${commentId}/${user?.email}`,
         {
           method: "POST",
           credentials: "include",
@@ -796,7 +794,7 @@ function VideoSection() {
   const DislikeVideo = async () => {
     try {
       const response = await fetch(
-        `${backendURL}/dislikevideo/${id}/${user?.email}`,
+        `${BACKEND_URL}/dislikevideo/${id}/${user?.email}`,
         {
           method: "POST",
           credentials: "include",
@@ -828,7 +826,7 @@ function VideoSection() {
     try {
       if (id && user?.email) {
         const response = await fetch(
-          `${backendURL}/watchlater/${id}/${user?.email}/${usermail}`,
+          `${BACKEND_URL}/watchlater/${id}/${user?.email}/${usermail}`,
           {
             method: "POST",
             credentials: "include",
@@ -858,7 +856,7 @@ function VideoSection() {
         youtubeChannelID,
       };
       const response = await fetch(
-        `${backendURL}/subscribe/${channelID}/${user?.email}/${usermail}`,
+        `${BACKEND_URL}/subscribe/${channelID}/${user?.email}/${usermail}`,
         {
           method: "POST",
           credentials: "include",
@@ -881,7 +879,7 @@ function VideoSection() {
   const updateViews = async (id) => {
     try {
       if (id !== undefined) {
-        const response = await fetch(`${backendURL}/updateview/${id}`, {
+        const response = await fetch(`${BACKEND_URL}/updateview/${id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -918,7 +916,7 @@ function VideoSection() {
         };
 
         const response = await fetch(
-          `${backendURL}/addplaylist/${user?.email}`,
+          `${BACKEND_URL}/addplaylist/${user?.email}`,
           {
             method: "POST",
             credentials: "include",
@@ -959,7 +957,7 @@ function VideoSection() {
         };
 
         const response = await fetch(
-          `${backendURL}/addvideotoplaylist/${user?.email}`,
+          `${BACKEND_URL}/addvideotoplaylist/${user?.email}`,
           {
             method: "POST",
             credentials: "include",
@@ -987,7 +985,7 @@ function VideoSection() {
     try {
       if (user?.email && id && playlistID) {
         const response = await fetch(
-          `${backendURL}/removevideo/${user?.email}/${id}/${playlistID}`,
+          `${BACKEND_URL}/removevideo/${user?.email}/${id}/${playlistID}`,
           {
             method: "POST",
             credentials: "include",
@@ -996,7 +994,7 @@ function VideoSection() {
             },
           }
         );
-        const data = await response.json();
+        await response.json();
       }
     } catch (error) {
       //console.log(error.message);

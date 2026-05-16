@@ -9,10 +9,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 
 function Subscriptions() {
-  const backendURL = "http://localhost:5000";;
-  // const backendURL = "http://localhost:3000";
+
   const [subscriptions, setSubscriptions] = useState([]);
   const [subsVideos, setSubsVideos] = useState([]);
   const [menuClicked, setMenuClicked] = useState(() => {
@@ -20,7 +20,7 @@ function Subscriptions() {
     return menu ? JSON.parse(menu) : false;
   });
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -43,7 +43,7 @@ function Subscriptions() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getsubscriptions/${user?.email}`
+            `${BACKEND_URL}/getsubscriptions/${user?.email}`
           );
           const result = await response.json();
           setSubscriptions(result);
@@ -62,11 +62,11 @@ function Subscriptions() {
           const newSubsVideos = [];
           for (const element of subscriptions) {
             const response = await fetch(
-              `${backendURL}/getotherchannel/${element.channelID}`
+              `${BACKEND_URL}/getotherchannel/${element.channelID}`
             );
             const userEmail = await response.json();
             const response2 = await fetch(
-              `${backendURL}/getuservideos/${userEmail}`
+              `${BACKEND_URL}/getuservideos/${userEmail}`
             );
             const myvideos = await response2.json();
 
@@ -125,7 +125,7 @@ function Subscriptions() {
     if (theme === false && !window.location.href.includes("/studio")) {
       document.body.style.backgroundColor = "white";
     } else if (theme === true && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "0f0f0f";
+      document.body.style.backgroundColor = "#0f0f0f";
     }
   }, [theme]);
 
@@ -133,7 +133,7 @@ function Subscriptions() {
 
   const updateViews = async (id) => {
     try {
-      const response = await fetch(`${backendURL}/updateview/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/updateview/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

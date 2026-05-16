@@ -6,13 +6,13 @@ import LeftPanel from "./LeftPanel";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import { BACKEND_URL } from "../config";
 
 function History() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -25,7 +25,7 @@ function History() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/gethistory/${user?.email}`
+            `${BACKEND_URL}/gethistory/${user?.email}`
           );
           const result = await response.json();
           setHistory(result.history || []);
@@ -43,7 +43,7 @@ function History() {
   const handleClearHistory = async () => {
     try {
       if (user?.email) {
-        await fetch(`${backendURL}/clearhistory/${user?.email}`, {
+        await fetch(`${BACKEND_URL}/clearhistory/${user?.email}`, {
           method: "DELETE",
         });
         setHistory([]);
@@ -56,7 +56,7 @@ function History() {
   const handleRemoveVideo = async (videoId) => {
     try {
       if (user?.email) {
-        await fetch(`${backendURL}/removehistory/${user?.email}/${videoId}`, {
+        await fetch(`${BACKEND_URL}/removehistory/${user?.email}/${videoId}`, {
           method: "DELETE",
         });
         setHistory(history.filter((item) => item._id !== videoId));

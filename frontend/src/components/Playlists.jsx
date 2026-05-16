@@ -23,17 +23,17 @@ import "../Css/likevideos.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 
 function Playlists() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const { id } = useParams();
   const [menuClicked, setMenuClicked] = useState(() => {
     const menu = localStorage.getItem("menuClicked");
     return menu ? JSON.parse(menu) : false;
   });
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -130,7 +130,7 @@ function Playlists() {
       try {
         if (id) {
           const response = await fetch(
-            `${backendURL}/getplaylists/${id}`
+            `${BACKEND_URL}/getplaylists/${id}`
           );
           const { playlistVideos, myPlaylists } = await response.json();
           setPlaylistsVideos(playlistVideos);
@@ -188,13 +188,13 @@ function Playlists() {
     if (theme === false && !window.location.href.includes("/studio")) {
       document.body.style.backgroundColor = "white";
     } else if (theme === true && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "0f0f0f";
+      document.body.style.backgroundColor = "#0f0f0f";
     }
   }, [theme]);
 
   const updateViews = async (id) => {
     try {
-      const response = await fetch(`${backendURL}/updateview/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/updateview/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -211,7 +211,7 @@ function Playlists() {
       try {
         if (playlistDetails.owner_email !== undefined) {
           const response = await fetch(
-            `${backendURL}/getchannelid/${playlistDetails.owner_email}`
+            `${BACKEND_URL}/getchannelid/${playlistDetails.owner_email}`
           );
           const { channelID } = await response.json();
           setChannelID(channelID);
@@ -229,7 +229,7 @@ function Playlists() {
       try {
         if (id) {
           const response = await fetch(
-            `${backendURL}/getsavedplaylist/${id}/${user?.email}`
+            `${BACKEND_URL}/getsavedplaylist/${id}/${user?.email}`
           );
           const data = await response.json();
           if (data === "Found") {
@@ -249,7 +249,7 @@ function Playlists() {
 
   const saveEditData = async () => {
     try {
-      const response = await fetch(`${backendURL}/saveplaylist/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/saveplaylist/${id}`, {
         method: "POST",
         body: JSON.stringify({ playlist_name: PlaylistName }),
         headers: {
@@ -266,7 +266,7 @@ function Playlists() {
   const DeletePlaylist = async () => {
     try {
       const response = await fetch(
-        `${backendURL}/deleteplaylist/${id}`,
+        `${BACKEND_URL}/deleteplaylist/${id}`,
         {
           method: "POST",
           headers: {
@@ -293,7 +293,7 @@ function Playlists() {
 
   const setPrivacy = async (privacy) => {
     try {
-      const response = await fetch(`${backendURL}/saveplaylistprivacy/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/saveplaylistprivacy/${id}`, {
         method: "POST",
         body: JSON.stringify({ privacy }),
         headers: {
@@ -309,7 +309,7 @@ function Playlists() {
   const SaveOtherPlaylist = async () => {
     try {
       const response = await fetch(
-        `${backendURL}/addotherplaylist/${id}/${user?.email}`,
+        `${BACKEND_URL}/addotherplaylist/${id}/${user?.email}`,
         {
           method: "POST",
           headers: {

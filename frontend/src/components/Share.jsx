@@ -12,7 +12,7 @@ import { MdOutlineContentCopy } from "react-icons/md";
 
 function Share() {
   const [copyText, setCopyText] = useState("Copy");
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });

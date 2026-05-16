@@ -5,9 +5,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { BACKEND_URL } from "../config";
 
 function Signup() {
-  const backendURL = BACKEND_URL;
+
   const [data, setData] = useState({});
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -64,7 +64,7 @@ function Signup() {
       return;
     }
     try {
-      const response = await fetch(`${backendURL}/signup`, {
+      const response = await fetch(`${BACKEND_URL}/signup`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(data),

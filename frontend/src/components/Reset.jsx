@@ -2,12 +2,13 @@ import { useState } from "react";
 import "../Css/reset.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BACKEND_URL } from "../config";
 
 function Reset() {
-  const backendURL = "http://localhost:5000";
+
   const [email, setEmail] = useState("");
   const [BtnLoading, setBtnLoading] = useState(false);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -46,7 +47,7 @@ function Reset() {
       return;
     } else {
       setBtnLoading(true);
-      const response = await fetch(`${backendURL}/resetlink`, {
+      const response = await fetch(`${BACKEND_URL}/resetlink`, {
         method: "POST",
         body: JSON.stringify({ email }),
         headers: {

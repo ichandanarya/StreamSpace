@@ -15,6 +15,7 @@ import "../Css/library.css";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 function generateRandomColors(count) {
   const transparency = 0.65; // Adjust transparency as needed (0 to 1)
   const colors = [];
@@ -30,8 +31,7 @@ function generateRandomColors(count) {
 }
 
 function Library() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [watchlater, setWatchLater] = useState([]);
   const [PlaylistData, setPlaylistData] = useState([]);
   const [playlistColors, setPlaylistColors] = useState([]);
@@ -45,7 +45,7 @@ function Library() {
   });
   const [savedPlaylist, setSavedPlaylist] = useState([]);
   document.title = "Library - YouTube";
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -81,7 +81,7 @@ function Library() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getplaylistdata/${user?.email}`
+            `${BACKEND_URL}/getplaylistdata/${user?.email}`
           );
           const playlistData = await response.json();
           setPlaylistData(playlistData);
@@ -98,7 +98,7 @@ function Library() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getwatchlater/${user?.email}`
+            `${BACKEND_URL}/getwatchlater/${user?.email}`
           );
           const savedData = await response.json();
           setWatchLater(savedData);
@@ -115,7 +115,7 @@ function Library() {
     const getLikeVideos = async () => {
       try {
         const response = await fetch(
-          `${backendURL}/getlikevideos/${user?.email}`
+          `${BACKEND_URL}/getlikevideos/${user?.email}`
         );
         const result = await response.json();
         setLikedVideos(result);
@@ -132,7 +132,7 @@ function Library() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannelid/${user?.email}`
+            `${BACKEND_URL}/getchannelid/${user?.email}`
           );
           const { channelID } = await response.json();
           setChannelID(channelID);
@@ -142,7 +142,7 @@ function Library() {
       }
     };
 
-    return () => getChannelID();
+    getChannelID();
   }, [user?.email]);
 
   useEffect(() => {
@@ -150,7 +150,7 @@ function Library() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getsavedplaylist/${user?.email}`
+            `${BACKEND_URL}/getsavedplaylist/${user?.email}`
           );
           const matchingPlaylists = await response.json();
           setSavedPlaylist(matchingPlaylists);
@@ -201,7 +201,7 @@ function Library() {
     if (theme === false && !window.location.href.includes("/studio")) {
       document.body.style.backgroundColor = "white";
     } else if (theme === true && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "0f0f0f";
+      document.body.style.backgroundColor = "#0f0f0f";
     }
   }, [theme]);
 
@@ -750,7 +750,7 @@ function Library() {
                       className="created-all-playlistss2"
                       key={index}
                       style={
-                        element.owner_email !== email &&
+                        element.owner_email !== user?.email &&
                         element.playlist_privacy === "Private"
                           ? { display: "none" }
                           : { display: "block" }

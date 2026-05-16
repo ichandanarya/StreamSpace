@@ -14,10 +14,10 @@ import noImage from "../../img/no-comment.png";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function Comments() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [AllComments, setAllComments] = useState([]);
   const [Profile, setProfile] = useState();
   const [filterComment, setFilterComment] = useState("");
@@ -26,7 +26,7 @@ function Comments() {
     const menu = localStorage.getItem("studioMenuClicked");
     return menu ? JSON.parse(menu) : false;
   });
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -118,7 +118,7 @@ function Comments() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getchannel/${user?.email}`
+            `${BACKEND_URL}/getchannel/${user?.email}`
           );
           const { userProfile } = await response.json();
           setProfile(userProfile);
@@ -135,7 +135,7 @@ function Comments() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getallcomments/${user?.email}`
+            `${BACKEND_URL}/getallcomments/${user?.email}`
           );
           const { comments } = await response.json();
 
@@ -143,7 +143,7 @@ function Comments() {
           const commentsWithVideoData = await Promise.all(
             comments.map(async (comment) => {
               const videoResponse = await fetch(
-                `${backendURL}/getdeletevideodata/${comment.videoid}`
+                `${BACKEND_URL}/getdeletevideodata/${comment.videoid}`
               );
               const videoData = await videoResponse.json();
 
@@ -168,7 +168,7 @@ function Comments() {
     try {
       if (commentId && id && user?.email) {
         const response = await fetch(
-          `${backendURL}/likecomment/${id}/${commentId}/${user?.email}`,
+          `${BACKEND_URL}/likecomment/${id}/${commentId}/${user?.email}`,
           {
             method: "POST",
             credentials: "include",
@@ -187,7 +187,7 @@ function Comments() {
   const HeartComment = async (id, commentID) => {
     try {
       const response = await fetch(
-        `${backendURL}/heartcomment/${id}/${commentID}`,
+        `${BACKEND_URL}/heartcomment/${id}/${commentID}`,
         {
           method: "POST",
           credentials: "include",
@@ -205,7 +205,7 @@ function Comments() {
   const DeleteComment = async (id, commentId) => {
     try {
       const response = await fetch(
-        `${backendURL}/deletecomment/${id}/${commentId}/${user?.email}`,
+        `${BACKEND_URL}/deletecomment/${id}/${commentId}/${user?.email}`,
         {
           method: "POST",
           credentials: "include",

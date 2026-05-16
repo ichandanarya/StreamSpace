@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "../config";
 //MUI Icons
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
@@ -21,8 +22,7 @@ import { RxCross1 } from "react-icons/rx";
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import { useSelector } from "react-redux";
 function Navbar() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const { data } = useParams();
   const [data2, setData] = useState(data);
   const [isbtnClicked, setisbtnClicked] = useState(false);
@@ -32,7 +32,7 @@ function Navbar() {
   const [searchedData, setSearchedData] = useState();
   const [loading, setLoading] = useState(true);
   const [newSearch, setNewSearch] = useState(false);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -45,7 +45,7 @@ function Navbar() {
     if (User.success) {
       setisbtnClicked(false);
     }
-  }, [user]);
+  }, [User.success]);
 
   useEffect(() => {
     const handler = (e) => {
@@ -72,7 +72,7 @@ function Navbar() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getuserimage/${user?.email}`
+            `${BACKEND_URL}/getuserimage/${user?.email}`
           );
           const { channelIMG } = await response.json();
           setProfilePic(channelIMG);

@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+import { BACKEND_URL } from "../config";
+const API_BASE_URL = `${BACKEND_URL}/api`;
 
 // Get token from localStorage
 const getToken = () => localStorage.getItem('authToken');

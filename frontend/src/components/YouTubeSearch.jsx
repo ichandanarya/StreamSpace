@@ -6,22 +6,20 @@ import LeftPanel from "./LeftPanel";
 import "../Css/youtubeSearch.css";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 
 function YouTubeSearch() {
-  const backendURL = "http://localhost:5000";
+
   const [searchQuery, setSearchQuery] = useState("");
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
-
-  const user = useSelector((state) => state.user.user);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -36,7 +34,7 @@ function YouTubeSearch() {
     setVideos([]);
 
     try {
-      const result = await searchYouTubeVideos(searchQuery, backendURL);
+      const result = await searchYouTubeVideos(searchQuery, BACKEND_URL);
       const formattedVideos = formatVideoData(result.videos);
       setVideos(formattedVideos);
       setHasSearched(true);

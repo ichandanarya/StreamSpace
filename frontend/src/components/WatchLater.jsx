@@ -7,19 +7,17 @@ import "../Css/likevideos.css";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../config";
 
 function WatchLater() {
-  const backendURL = "http://localhost:5000";;
-  // const backendURL = "http://localhost:3000";
-  const [email, setEmail] = useState();
-  const [name, setName] = useState();
+
   const [menuClicked, setMenuClicked] = useState(() => {
     const menu = localStorage.getItem("menuClicked");
     return menu ? JSON.parse(menu) : false;
   });
   const [watchlater, setWatchLater] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -73,7 +71,7 @@ function WatchLater() {
     if (theme === false && !window.location.href.includes("/studio")) {
       document.body.style.backgroundColor = "white";
     } else if (theme === true && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "0f0f0f";
+      document.body.style.backgroundColor = "#0f0f0f";
     }
   }, [theme]);
 
@@ -86,7 +84,7 @@ function WatchLater() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getwatchlater/${user?.email}`
+            `${BACKEND_URL}/getwatchlater/${user?.email}`
           );
           const savedData = await response.json();
           setWatchLater(savedData);
@@ -103,7 +101,7 @@ function WatchLater() {
   const updateViews = async (id) => {
     try {
       const response = await fetch(
-        `${backendURL}/updateview/${id}`,
+        `${BACKEND_URL}/updateview/${id}`,
         {
           method: "POST",
           headers: {

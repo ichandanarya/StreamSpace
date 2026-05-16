@@ -23,10 +23,10 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function Content() {
-  const backendURL = "http://localhost:5000";
-  // const backendURL = "http://localhost:3000";
+
   const [userVideos, setUserVideos] = useState([]);
   const [sortByDateAsc, setSortByDateAsc] = useState(true);
   const [changeSort, setChangeSort] = useState(false);
@@ -41,7 +41,7 @@ function Content() {
     const menu = localStorage.getItem("studioMenuClicked");
     return menu ? JSON.parse(menu) : false;
   });
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -149,7 +149,7 @@ function Content() {
       try {
         if (user?.email) {
           const response = await fetch(
-            `${backendURL}/getuservideos/${user?.email}`
+            `${BACKEND_URL}/getuservideos/${user?.email}`
           );
 
           const data = await response.json();
@@ -168,7 +168,7 @@ function Content() {
       try {
         if (DeleteVideoID) {
           const response = await fetch(
-            `${backendURL}/getdeletevideodata/${DeleteVideoID}`
+            `${BACKEND_URL}/getdeletevideodata/${DeleteVideoID}`
           );
 
           const data = await response.json();
@@ -203,7 +203,7 @@ function Content() {
   const DeleteVideo = async (id) => {
     try {
       if (id) {
-        const response = await fetch(`${backendURL}/deletevideo/${id}`, {
+        const response = await fetch(`${BACKEND_URL}/deletevideo/${id}`, {
           method: "POST",
           credentials: "include",
           headers: {

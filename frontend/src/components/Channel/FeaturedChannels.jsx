@@ -8,17 +8,17 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function FeaturedChannels(prop) {
-  // const backendURL = "http://localhost:5000";
-  const backendURL = "http://localhost:3000";
+
   const [addChannelClicked, setAddChannelClicked] = useState(false);
   const [Subscriptions, setSubscriptions] = useState([]);
   const [featuredChannelsData, setFeaturedChannelsData] = useState([]);
   const [SelectedChannel, setSelectedChannel] = useState();
   const [SaveChannel, setSaveChannel] = useState();
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
@@ -63,7 +63,7 @@ function FeaturedChannels(prop) {
       try {
         if (prop?.newmail) {
           const response = await fetch(
-            `${backendURL}/getsubscriptions/${prop?.newmail}`
+            `${BACKEND_URL}/getsubscriptions/${prop?.newmail}`
           );
           const result = await response.json();
           setSubscriptions(result);
@@ -79,7 +79,7 @@ function FeaturedChannels(prop) {
     const getFeaturedChannels = async () => {
       try {
         const response = await fetch(
-          `${backendURL}/getfeaturedchannels/${prop?.newmail}`
+          `${BACKEND_URL}/getfeaturedchannels/${prop?.newmail}`
         );
         const featuredChannelData = await response.json();
         setFeaturedChannelsData(featuredChannelData);
@@ -102,7 +102,7 @@ function FeaturedChannels(prop) {
         };
 
         const response = await fetch(
-          `${backendURL}/savefeaturedchannel/${prop?.newmail}`,
+          `${BACKEND_URL}/savefeaturedchannel/${prop?.newmail}`,
           {
             method: "POST",
             body: JSON.stringify(data),
@@ -127,7 +127,7 @@ function FeaturedChannels(prop) {
   const DeleteChannel = async (channelid) => {
     try {
       const response = await fetch(
-        `${backendURL}/deletefeaturedchannel/${user?.email}/${channelid}`,
+        `${BACKEND_URL}/deletefeaturedchannel/${user?.email}/${channelid}`,
         {
           method: "POST",
           headers: {

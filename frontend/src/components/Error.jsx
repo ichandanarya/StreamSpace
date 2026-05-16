@@ -3,7 +3,7 @@ import "../Css/error.css";
 import { useState } from "react";
 
 function Error() {
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });

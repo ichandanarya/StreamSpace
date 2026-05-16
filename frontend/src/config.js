@@ -1,2 +1,13 @@
-// Backend URL configuration
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+const trimTrailingSlash = (value) => value.replace(/\/+$/, "");
+
+const resolveBackendUrl = () => {
+  const configuredUrl = import.meta.env.VITE_BACKEND_URL;
+
+  if (configuredUrl && configuredUrl.trim()) {
+    return trimTrailingSlash(configuredUrl.trim());
+  }
+
+  return "http://localhost:5000";
+};
+
+export const BACKEND_URL = resolveBackendUrl();

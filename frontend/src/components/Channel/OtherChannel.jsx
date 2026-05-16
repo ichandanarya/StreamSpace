@@ -21,10 +21,11 @@ import { RiUserSettingsLine } from "react-icons/ri";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
+import { BACKEND_URL } from "../../config";
 
 function OtherChannel() {
   // FIXED: Use correct backend URL (MongoDB connection)
-  const backendURL = "http://localhost:5000"; // ✅ FIXED PORT
+
   const { id } = useParams();
   const [Email, setEmail] = useState();
   const [channelName, setChannelname] = useState();
@@ -94,7 +95,7 @@ function OtherChannel() {
     try {
       console.log("📤 Sending request to backend with query:", query);
       
-      const response = await fetch(`${backendURL}/youtube/search`, {
+      const response = await fetch(`${BACKEND_URL}/youtube/search`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -153,7 +154,7 @@ function OtherChannel() {
   useEffect(() => {
     const getUserMail = async () => {
       try {
-        const response = await fetch(`${backendURL}/getotherchannel/${id}`);
+        const response = await fetch(`${BACKEND_URL}/getotherchannel/${id}`);
         const userEmail = await response.json();
         setEmail(userEmail);
       } catch (error) {
@@ -162,14 +163,14 @@ function OtherChannel() {
     };
 
     getUserMail();
-  }, [id, backendURL]); // Added backendURL as dependency
+  }, [id]);
 
-  // ✅ FIXED (Error 1): Added 'Email' and 'backendURL' to dependency array.
+  // ✅ FIXED (Error 1): Added 'Email' and 'BACKEND_URL' to dependency array.
   useEffect(() => {
     const getChannelData = async () => {
       try {
         if (Email) {
-          const response = await fetch(`${backendURL}/getchannel/${Email}`);
+          const response = await fetch(`${BACKEND_URL}/getchannel/${Email}`);
           const data = await response.json();
           const { userProfile, ChannelName } = data;
           setChannelProfile(userProfile);
@@ -181,19 +182,19 @@ function OtherChannel() {
     };
 
     getChannelData();
-  }, [Email, backendURL]);
+  }, [Email]);
 
   document.title =
     channelName && channelName !== undefined
       ? `${channelName} - YouTube`
       : "YouTube";
 
-  // ✅ FIXED (Error 1): Added 'Email' and 'backendURL' to dependency array.
+  // ✅ FIXED (Error 1): Added 'Email' and 'BACKEND_URL' to dependency array.
   useEffect(() => {
     const getChannelCover = async () => {
       try {
         if (Email) {
-          const response = await fetch(`${backendURL}/getcover/${Email}`);
+          const response = await fetch(`${BACKEND_URL}/getcover/${Email}`);
           const coverimg = await response.json();
           setCoverIMG(coverimg);
         }
@@ -203,14 +204,14 @@ function OtherChannel() {
     };
 
     getChannelCover();
-  }, [Email, backendURL]);
+  }, [Email]);
 
-  // ✅ FIXED (Error 1): Added 'Email' and 'backendURL' to dependency array.
+  // ✅ FIXED (Error 1): Added 'Email' and 'BACKEND_URL' to dependency array.
   useEffect(() => {
     const getSubscribers = async () => {
       try {
         if (Email) {
-          const response = await fetch(`${backendURL}/getchannelid/${Email}`);
+          const response = await fetch(`${BACKEND_URL}/getchannelid/${Email}`);
           const { subscribers } = await response.json();
           setSubscribers(subscribers);
         }
@@ -220,14 +221,14 @@ function OtherChannel() {
     };
 
     getSubscribers();
-  }, [Email, backendURL]);
+  }, [Email]);
 
-  // ✅ FIXED (Error 1): Added 'Email' and 'backendURL' to dependency array.
+  // ✅ FIXED (Error 1): Added 'Email' and 'BACKEND_URL' to dependency array.
   useEffect(() => {
     const getUserVideos = async () => {
       try {
         if (Email) {
-          const response = await fetch(`${backendURL}/getuservideos/${Email}`);
+          const response = await fetch(`${BACKEND_URL}/getuservideos/${Email}`);
           const myvideos = await response.json();
           setMyVideos(myvideos);
         }
@@ -236,7 +237,7 @@ function OtherChannel() {
       }
     };
     getUserVideos();
-  }, [Email, backendURL]);
+  }, [Email]);
 
   // ✅ FIXED (Error 1): Added 'Section' and 'coverIMG' to dependency array.
   useEffect(() => {
@@ -265,7 +266,7 @@ function OtherChannel() {
   useEffect(() => {
     const isStudioPage = window.location.href.includes("/studio");
     if (!isStudioPage) {
-      document.body.style.backgroundColor = theme ? "0f0f0f" : "white";
+      document.body.style.backgroundColor = theme ? "#0f0f0f" : "white";
     }
   }, [theme]);
 
@@ -275,7 +276,7 @@ function OtherChannel() {
       try {
         if (user?.email && id) {
           const response = await fetch(
-            `${backendURL}/checksubscription/${id}/${user.email}/${Email}`
+            `${BACKEND_URL}/checksubscription/${id}/${user.email}/${Email}`
           );
           const { message } = await response.json();
           if (message === true) {
@@ -290,7 +291,7 @@ function OtherChannel() {
     };
 
     checkSubscription();
-  }, [id, user?.email, Email, backendURL]);
+  }, [id, user?.email, Email]);
 
   const getUsername = (email) => {
     return email.split("@")[0];
@@ -316,7 +317,7 @@ function OtherChannel() {
       };
 
       const response = await fetch(
-        `${backendURL}/subscribe/${id}/${user.email}/${Email}`,
+        `${BACKEND_URL}/subscribe/${id}/${user.email}/${Email}`,
         {
           method: "POST",
           credentials: "include",

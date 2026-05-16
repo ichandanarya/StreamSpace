@@ -1,29 +1,52 @@
-require("dotenv").config();
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const { env, isProduction, validateEnv } = require("../config/env");
+
+let connectionPromise = null;
 
 const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000,
-    });
+  if (connectionPromise) {
+    return connectionPromise;
+  }
 
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  const { errors, warnings } = validateEnv();
+  warnings.forEach((warning) => console.warn(`[env] ${warning}`));
+
+  if (errors.length > 0) {
+    const message = errors.join(" ");
+    console.error(`[database] ${message}`);
+
+    if (isProduction) {
+      throw new Error(message);
+    }
+
+    return null;
+  }
+
+  connectionPromise = mongoose.connect(env.MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000,
+  });
+
+  try {
+    const conn = await connectionPromise;
+    console.log(`MongoDB connected: ${conn.connection.host}`);
     return conn;
   } catch (error) {
-    console.error('❌ MongoDB Connection Error:', error.message);
-    
-    // Specific error messages
-    if (error.message.includes('ECONNREFUSED')) {
-      console.error('Server is not running or wrong port');
-    } else if (error.message.includes('authentication failed')) {
-      console.error('Invalid username or password');
-    } else if (error.message.includes('getaddrinfo')) {
-      console.error('Invalid cluster name or network error');
+    connectionPromise = null;
+    console.error(`[database] MongoDB connection failed: ${error.message}`);
+
+    if (error.message.includes("ECONNREFUSED")) {
+      console.error("[database] MongoDB server is not running or the port is wrong.");
+    } else if (error.message.includes("authentication failed")) {
+      console.error("[database] MongoDB username or password is invalid.");
+    } else if (error.message.includes("getaddrinfo")) {
+      console.error("[database] MongoDB host/cluster name cannot be resolved.");
     }
-    
-    process.exit(1);
+
+    if (isProduction) {
+      throw error;
+    }
+
+    return null;
   }
 };
 
